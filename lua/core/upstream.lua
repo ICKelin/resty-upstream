@@ -19,8 +19,9 @@ function _M.get_node(scheme, host)
 end
 
 
-function _M.del_node(host)
-    upstreams:delete(host)
+function _M.del_node(scheme, host)
+    local key = scheme.."://"..host
+    upstreams:delete(key)
 end
 
 
