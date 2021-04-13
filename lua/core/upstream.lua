@@ -1,5 +1,6 @@
 
 local ngx = ngx
+local ngx_var = ngx.var
 local pcall = pcall
 local log = require("comm.log")
 local new_tab = require("table.new")
@@ -10,9 +11,10 @@ local _M = {}
 local upstreams = ngx.shared.upstreams
 
 
-function _M.get_node(host) 
-    local val = upstreams:get(host)
-    log.info("host ", host, " node info: ", val)
+function _M.get_node(scheme, host) 
+    local key = scheme.."://"..host
+    local val = upstreams:get(key)
+    log.info("scheme ", scheme, " host ", host, " node info: ", val)
     return decode_json(val)
 end
 
@@ -26,9 +28,12 @@ function _M.set_node(node_info)
     local host = node_info.host
     local ip = node_info.ip
     local port = node_info.port
+    local scheme = node_info.scheme
     local value = encode_json(node_info)
-    log.info("host: ", host, " ip: ", ip, " port: ", port)
-    upstreams:set(host, value)
+
+    local key = scheme.."://"..host
+    log.info("key: ", key, " ip: ", ip, " port: ", port)
+    upstreams:set(key, value)
 end
 
 

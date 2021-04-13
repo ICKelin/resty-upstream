@@ -24,7 +24,9 @@ end
 
 
 function _M.balancer_phase()
-    local node = upstream.get_node(ngx_var.host)
+    local scheme = ngx_var.scheme
+    local host = ngx_var.host
+    local node = upstream.get_node(scheme, host)
     if not node then
         resp(404)
         return
