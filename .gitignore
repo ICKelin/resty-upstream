@@ -14,3 +14,7 @@
 *_temp
 *.log
 *.pid
+
+*.crt
+*.key
+*.pem
