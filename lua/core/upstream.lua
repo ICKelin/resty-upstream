@@ -21,6 +21,7 @@ end
 
 function _M.del_node(scheme, host)
     local key = scheme.."://"..host
+    log.info("del node ", key)
     upstreams:delete(key)
 end
 
