@@ -25,7 +25,12 @@ end
 
 function _M.balancer_phase()
     local scheme = ngx_var.scheme
+    local http2 = ngx_var.http2
     local host = ngx_var.host
+    if http2 ~= "" then
+        scheme = http2
+    end
+
     local node = upstream.get_node(scheme, host)
     if not node then
         resp(502)
