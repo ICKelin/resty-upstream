@@ -8,33 +8,31 @@ local decode_json = require("cjson.safe").decode
 local encode_json = require("cjson.safe").encode
 
 local _M = {}
-local upstreams = ngx.shared.upstreams
+local upstream = ngx.shared.stream_upstream
 
-function _M.get_node(scheme, host) 
-    local key = scheme.."://"..host
-    local val = upstreams:get(key)
-    log.info("scheme ", scheme, " host ", host, " node info: ", val)
+function _M.get_node(scheme, listen_addr) 
+    local key = scheme.."://"..listen_addr
+    local val = streams:get(key)
+    log.info("scheme ", scheme, " listen addr ", listen_addr, " node info: ", val)
     return decode_json(val)
 end
 
 
-function _M.del_node(scheme, host)
-    local key = scheme.."://"..host
+function _M.del_node(scheme, listen_addr)
+    local key = scheme.."://"..listen_addr
     log.info("del node ", key)
-    upstreams:delete(key)
+    streams:delete(key)
 end
 
 
 function _M.set_node(node_info)
-    local host = node_info.host
-    local ip = node_info.ip
-    local port = node_info.port
+    local listen_addr = node_info.listen_addr
     local scheme = node_info.scheme
     local value = encode_json(node_info)
 
     local key = scheme.."://"..host
-    log.info("key: ", key, " ip: ", ip, " port: ", port)
-    upstreams:set(key, value)
+    log.info("key: ", key, " listen addr: ", listen_addr)
+    streams:set(key, value)
 end
 
 
