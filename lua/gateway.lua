@@ -44,12 +44,4 @@ function _M.balancer_phase()
     end
 end
 
-function _M.stream_init_worker()
-
-end
-
-function _M.stream_balancer_phase()
-
-end
-
 return _M
